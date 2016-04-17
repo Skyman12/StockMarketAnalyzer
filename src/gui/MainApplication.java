@@ -48,7 +48,8 @@ public class MainApplication extends JFrame {
 			"By PE", 
 			"By Revenue", 
 			"By One Year Target Price" , 
-			"By One Year Target Change"};
+			"By One Year Target Change",
+			"By 8 Point Analysis"};
 	
 	private JScrollPane allStocksScrollPane;
 	private JPanel allStocksPanel;
@@ -167,9 +168,22 @@ public class MainApplication extends JFrame {
 		panelAllStocksInteraction.add(btnAddStockToWatchlist);
 		
 		btnAllStocksViewStock = new JButton("View Stock");
+		btnAllStocksViewStock.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				StockData currentStock = (StockData) allStocksList.getSelectedValue();
+				StockDetailsFrame newPanel = null;
+				try {
+					newPanel = new StockDetailsFrame(currentStock.getStock());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				newPanel.setVisible(true);
+			}
+		});
 		panelAllStocksInteraction.add(btnAllStocksViewStock);
 		
-		btnRunPoint = new JButton("Run 7 Point Analysis");
+		btnRunPoint = new JButton("Run 8 Point Analysis");
 		btnRunPoint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
@@ -262,6 +276,8 @@ public class MainApplication extends JFrame {
 			return stockPriceCalculator.getOneYearTargetPrice();
 		case 8: 
 			return stockPriceCalculator.getOneYearTargetChange();
+		case 9:
+			return stockPriceCalculator.get8PointAnalysisForAllStocks();
 		default:
 			return stockPriceCalculator.getPriceForAllStocks();
 		}	

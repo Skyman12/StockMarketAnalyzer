@@ -73,6 +73,19 @@ public class StockPriceCalculator {
 		return stockWithChange;
 	}
 	
+	public ArrayList<StockData> get8PointAnalysisForAllStocks () {
+		ArrayList<StockData> stockWithChange = new ArrayList<StockData>();
+		for (Stock stock : stockList) {
+				try {
+					TwelvePointSimulation simluation = new TwelvePointSimulation(new StockData(stock, null));
+					int total = simluation.runAnaylsis();
+					stockWithChange.add(new StockData(stock, new BigDecimal(total)));
+				} catch (Exception e) {}
+		}
+		Collections.sort(stockWithChange);
+		return stockWithChange;
+	}
+	
 	public ArrayList<StockData> getPriceForAllStocks() {
 		ArrayList<StockData> stockWithChange = new ArrayList<StockData>();
 		for (Stock stock : stockList) {
