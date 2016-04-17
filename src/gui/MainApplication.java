@@ -29,6 +29,7 @@ import javax.swing.border.EmptyBorder;
 import stockData.StockData;
 import stockData.StockPriceCalculator;
 import stockData.TwelvePointSimulation;
+import stockData.UserStocksManager;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,6 +40,7 @@ public class MainApplication extends JFrame {
 	private JTabbedPane tabbedPane;
 	
 	private static StockPriceCalculator stockPriceCalculator;
+	private static StockPriceCalculator watchlistPriceCalculator;
 	private String[] sortingOptions = {
 			"By Change", 
 			"By Price", 
@@ -79,6 +81,7 @@ public class MainApplication extends JFrame {
 	private JButton btnWatchlistViewStock;
 	private JList usersWatchlist;
 	private JButton btnRunPoint;
+	private JButton btnWatchListSimulation;
 	
 
 	/**
@@ -88,16 +91,8 @@ public class MainApplication extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					File file = new File("testCompanyList.txt");
-					Scanner reader = new Scanner(file);
-					ArrayList<String> stockSymbolList = new ArrayList<String>();
-					while (reader.hasNextLine()) {
-						String text = reader.nextLine().replace('"', ' ');
-						String[] dataList = text.split(",");
-						stockSymbolList.add(dataList[0].trim());
-					}
-					
-					stockPriceCalculator = new StockPriceCalculator(stockSymbolList.toArray(new String[stockSymbolList.size()]));
+					stockPriceCalculator = new StockPriceCalculator("testCompanyList.txt");
+					watchlistPriceCalculator = new StockPriceCalculator("usersStocks.txt");
 					
 					MainApplication frame = new MainApplication();
 					frame.setVisible(true);
@@ -150,7 +145,7 @@ public class MainApplication extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					stockPriceCalculator.populateStockList(progressBar);
-					allStocksList.setListData(getChoice(allStocksSortBy.getSelectedIndex()).toArray());
+					allStocksList.setListData(getChoice(stockPriceCalculator, allStocksSortBy.getSelectedIndex()).toArray());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -165,20 +160,25 @@ public class MainApplication extends JFrame {
 		allStocksPanel.add(panelAllStocksInteraction);
 		
 		btnAddStockToWatchlist = new JButton("Add Stock to Watchlist");
+		btnAddStockToWatchlist.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				StockData currentStock = (StockData) allStocksList.getSelectedValue();
+				try {
+					UserStocksManager.addStock(watchlistPriceCalculator, currentStock.getStock());
+					usersWatchlist.setListData(getChoice(watchlistPriceCalculator, watchlistComboBox.getSelectedIndex()).toArray());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		panelAllStocksInteraction.add(btnAddStockToWatchlist);
 		
 		btnAllStocksViewStock = new JButton("View Stock");
 		btnAllStocksViewStock.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				StockData currentStock = (StockData) allStocksList.getSelectedValue();
-				StockDetailsFrame newPanel = null;
-				try {
-					newPanel = new StockDetailsFrame(currentStock.getStock());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				newPanel.setVisible(true);
+				viewStock(allStocksList);
 			}
 		});
 		panelAllStocksInteraction.add(btnAllStocksViewStock);
@@ -191,9 +191,7 @@ public class MainApplication extends JFrame {
 		btnRunPoint.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				StockData currentStock = (StockData) allStocksList.getSelectedValue();
-				TwelvePointSimulationFrame newPanel = new TwelvePointSimulationFrame(currentStock);
-				newPanel.setVisible(true);
+				run8PointSimulation(allStocksList);
 			}
 		});
 		panelAllStocksInteraction.add(btnRunPoint);
@@ -204,7 +202,7 @@ public class MainApplication extends JFrame {
 		allStocksSortBy = new JComboBox(sortingOptions);
 		allStocksSortBy.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				allStocksList.setListData(getChoice(allStocksSortBy.getSelectedIndex()).toArray());
+				allStocksList.setListData(getChoice(stockPriceCalculator, allStocksSortBy.getSelectedIndex()).toArray());
 			}
 		});
 		panelAllStocksInteraction.add(allStocksSortBy);
@@ -234,21 +232,68 @@ public class MainApplication extends JFrame {
 		panelMyWatchlistUpdate.add(myWatchlistProgressbar);
 		
 		btnUpdateWatchlistStocks = new JButton("Update Stocks");
+		btnUpdateWatchlistStocks.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					watchlistPriceCalculator.populateStockList(myWatchlistProgressbar);
+					usersWatchlist.setListData(getChoice(watchlistPriceCalculator, watchlistComboBox.getSelectedIndex()).toArray());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+				DateFormat dateFormat = new SimpleDateFormat("HH:mm MM/dd/yyyy");
+				Calendar cal = Calendar.getInstance();
+				labelMyWatchlistLastUpdateText.setText(dateFormat.format(cal.getTime()));
+			}
+		});
 		panelMyWatchlistUpdate.add(btnUpdateWatchlistStocks);
 		
 		panelMyWatchlistInteraction = new JPanel();
 		myWatchlistPanel.add(panelMyWatchlistInteraction);
 		
 		btnRemoveStockFrom = new JButton("Remove Stock from Watchlist");
+		btnRemoveStockFrom.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				StockData currentStock = (StockData) usersWatchlist.getSelectedValue();
+				try {
+					UserStocksManager.removeStock(watchlistPriceCalculator, currentStock.getStock());
+					usersWatchlist.setListData(getChoice(watchlistPriceCalculator, watchlistComboBox.getSelectedIndex()).toArray());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		panelMyWatchlistInteraction.add(btnRemoveStockFrom);
 		
 		btnWatchlistViewStock = new JButton("View Stock");
+		btnWatchlistViewStock.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				viewStock(usersWatchlist);
+			}
+		});
 		panelMyWatchlistInteraction.add(btnWatchlistViewStock);
+		
+		btnWatchListSimulation = new JButton("Run 8 Point Simulation");
+		btnWatchListSimulation.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				run8PointSimulation(usersWatchlist);
+			}
+		});
+		panelMyWatchlistInteraction.add(btnWatchListSimulation);
 		
 		labelWatchlistSortBy = new JLabel("Sort by: ");
 		panelMyWatchlistInteraction.add(labelWatchlistSortBy);
 		
 		watchlistComboBox = new JComboBox(sortingOptions);
+		watchlistComboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				usersWatchlist.setListData(getChoice(watchlistPriceCalculator, watchlistComboBox.getSelectedIndex()).toArray());
+			}
+		});
 		panelMyWatchlistInteraction.add(watchlistComboBox);
 		
 		usersWatchlist = new JList();
@@ -256,30 +301,47 @@ public class MainApplication extends JFrame {
 		
 	}
 	
-	private ArrayList<StockData> getChoice(int choice) {
+	protected void run8PointSimulation(JList currentList) {
+		StockData currentStock = (StockData) currentList.getSelectedValue();
+		TwelvePointSimulationFrame newPanel = new TwelvePointSimulationFrame(currentStock);
+		newPanel.setVisible(true);	
+	}
+
+	protected void viewStock(JList currentList) {
+		StockData currentStock = (StockData) currentList.getSelectedValue();
+		StockDetailsFrame newPanel = null;
+		try {
+			newPanel = new StockDetailsFrame(currentStock.getStock());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		newPanel.setVisible(true);	
+	}
+
+	private ArrayList<StockData> getChoice(StockPriceCalculator calculator, int choice) {
 		switch (choice) {
 		case 0: 
-			return stockPriceCalculator.getChangeForAllStocks();
+			return calculator.getChangeForAllStocks();
 		case 1: 
-			return stockPriceCalculator.getPriceForAllStocks();
+			return calculator.getPriceForAllStocks();
 		case 2: 
-			return stockPriceCalculator.getPercentChangeForAllStocks();
+			return calculator.getPercentChangeForAllStocks();
 		case 3: 
-			return stockPriceCalculator.getDividendAnnualYieldForAllStocks();
+			return calculator.getDividendAnnualYieldForAllStocks();
 		case 4: 
-			return stockPriceCalculator.getDividendAnnualYieldPercentForAllStocks();
+			return calculator.getDividendAnnualYieldPercentForAllStocks();
 		case 5: 
-			return stockPriceCalculator.getPEForAllStocks();
+			return calculator.getPEForAllStocks();
 		case 6: 
-			return stockPriceCalculator.getRevenueForAllStocks();
+			return calculator.getRevenueForAllStocks();
 		case 7: 
-			return stockPriceCalculator.getOneYearTargetPrice();
+			return calculator.getOneYearTargetPrice();
 		case 8: 
-			return stockPriceCalculator.getOneYearTargetChange();
+			return calculator.getOneYearTargetChange();
 		case 9:
-			return stockPriceCalculator.get8PointAnalysisForAllStocks();
+			return calculator.get8PointAnalysisForAllStocks();
 		default:
-			return stockPriceCalculator.getPriceForAllStocks();
+			return calculator.getPriceForAllStocks();
 		}	
 	}
 }

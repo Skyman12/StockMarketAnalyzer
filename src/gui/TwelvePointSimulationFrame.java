@@ -59,7 +59,7 @@ public class TwelvePointSimulationFrame extends JFrame {
 		contentPane.add(lblStockName);
 		
 		lblStockNameText = new JLabel(simulation.stock.getName());
-		lblStockNameText.setBounds(103, 13, 203, 16);
+		lblStockNameText.setBounds(103, 13, 445, 16);
 		contentPane.add(lblStockNameText);
 		
 		lblStockSymbol = new JLabel("Stock Symbol: ");
@@ -67,7 +67,7 @@ public class TwelvePointSimulationFrame extends JFrame {
 		contentPane.add(lblStockSymbol);
 		
 		lblStockSymbolText = new JLabel(simulation.stock.getSymbol());
-		lblStockSymbolText.setBounds(103, 42, 203, 16);
+		lblStockSymbolText.setBounds(103, 42, 397, 16);
 		contentPane.add(lblStockSymbolText);
 		
 		lblNewLabel = new JLabel("-----------------------------------------------------");

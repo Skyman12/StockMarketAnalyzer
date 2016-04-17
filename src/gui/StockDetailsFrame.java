@@ -46,11 +46,11 @@ public class StockDetailsFrame extends JFrame {
 		contentPane.add(lblStockSymbol);
 		
 		lblStockNameText = new JLabel(stock.getName());
-		lblStockNameText.setBounds(114, 13, 125, 16);
+		lblStockNameText.setBounds(114, 13, 396, 16);
 		contentPane.add(lblStockNameText);
 		
 		lblStockSymbolText = new JLabel(stock.getSymbol());
-		lblStockSymbolText.setBounds(114, 40, 125, 16);
+		lblStockSymbolText.setBounds(114, 40, 332, 16);
 		contentPane.add(lblStockSymbolText);
 		
 		scrollPane = new JScrollPane();

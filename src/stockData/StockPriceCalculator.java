@@ -1,4 +1,5 @@
 package stockData;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 import javax.swing.JProgressBar;
@@ -19,19 +21,45 @@ import yahoofinance.quotes.stock.StockQuote;
 import yahoofinance.quotes.stock.StockStats;
 
 public class StockPriceCalculator {
-	
-	public String[] stockSymbolList;
+	private String fileName;
+	public ArrayList<String> stockSymbolList;
 	public ArrayList<Stock> stockList;
 	
 	public int percentCompleted = 0;
 	private int stocksCompleted = 0;
 	
-	public StockPriceCalculator(String[] stockSymbolList) throws IOException {
-		this.stockSymbolList = stockSymbolList;
+	public StockPriceCalculator(String fileName) throws IOException {
 		stockList = new ArrayList<Stock>();
+		this.fileName = fileName;
+	}
+	
+	public void addStock(String stockSymbol) throws IOException {
+		Stock s = YahooFinance.get(stockSymbol, true);
+		stockList.add(s);
+	}
+	
+	public void removeStock(String stockSymbol) throws IOException {
+		Stock stock = null;
+		for (Stock s : stockList) {
+			if (s.getSymbol().equals(stockSymbol)) {
+				stock = s;
+				break;
+			}
+		}
+		
+		stockList.remove(stock);
 	}
 	
 	public void populateStockList(JProgressBar progressBar) throws IOException {
+		File file = new File(fileName);
+		Scanner reader = new Scanner(file);
+		stockSymbolList = new ArrayList<>();
+		while (reader.hasNextLine()) {
+			String text = reader.nextLine().replace('"', ' ');
+			String[] dataList = text.split(",");
+			stockSymbolList.add(dataList[0].trim());
+		}
+		
 		stockList.clear();
 		stocksCompleted = 0;
 		for (String stock : stockSymbolList) {
@@ -39,7 +67,7 @@ public class StockPriceCalculator {
 				Stock s = YahooFinance.get(stock, true);
 				stockList.add(s);
 				stocksCompleted++;
-                progressBar.setValue(100 * stocksCompleted / stockSymbolList.length);
+                progressBar.setValue(100 * stocksCompleted / stockSymbolList.size());
                 progressBar.update(progressBar.getGraphics());  
 			} catch (Exception e) {
 				
