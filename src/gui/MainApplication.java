@@ -28,6 +28,10 @@ import javax.swing.border.EmptyBorder;
 
 import stockData.StockData;
 import stockData.StockPriceCalculator;
+import stockData.TwelvePointSimulation;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainApplication extends JFrame {
 
@@ -73,6 +77,7 @@ public class MainApplication extends JFrame {
 	private JComboBox watchlistComboBox;
 	private JButton btnWatchlistViewStock;
 	private JList usersWatchlist;
+	private JButton btnRunPoint;
 	
 
 	/**
@@ -163,6 +168,21 @@ public class MainApplication extends JFrame {
 		
 		btnAllStocksViewStock = new JButton("View Stock");
 		panelAllStocksInteraction.add(btnAllStocksViewStock);
+		
+		btnRunPoint = new JButton("Run 7 Point Analysis");
+		btnRunPoint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnRunPoint.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				StockData currentStock = (StockData) allStocksList.getSelectedValue();
+				TwelvePointSimulationFrame newPanel = new TwelvePointSimulationFrame(currentStock);
+				newPanel.setVisible(true);
+			}
+		});
+		panelAllStocksInteraction.add(btnRunPoint);
 		
 		lblSortBy = new JLabel("Sort by: ");
 		panelAllStocksInteraction.add(lblSortBy);

@@ -7,4 +7,5 @@
 "ATHN","athenahealth, Inc.","142.14","5492031331.62","n/a","2007","Miscellaneous","Business Services","http://www.nasdaq.com/symbol/athn",
 "AFCB","Athens Bancshares Corporation","27.81","50296470.75","n/a","2010","Finance","Savings Institutions","http://www.nasdaq.com/symbol/afcb",
 "ATHX","Athersys, Inc.","1.17","97246309.68","n/a","n/a","Health Care","Major Pharmaceuticals","http://www.nasdaq.com/symbol/athx",
-"AAPC","Atlantic Alliance Partnership Corp.","10.23","106267326.99","n/a","2015","Finance","Business Services","http://www.nasdaq.com/symbol/aapc"
+"AAPC","Atlantic Alliance Partnership Corp.","10.23","106267326.99","n/a","2015","Finance","Business Services","http://www.nasdaq.com/symbol/aapc",
+"TSLA"

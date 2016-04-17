@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="C:/Users/Blake Skaja/Documents/Workspace/YahooFinanceAPI-2.0.0/YahooFinanceAPI-2.0.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Blake Skaja/Documents/Workspace/WB_v1.8.0_UpdateSite_for_Eclipse4.5/content.jar"/>
+	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

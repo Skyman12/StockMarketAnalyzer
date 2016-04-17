@@ -2,6 +2,7 @@ package stockData;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class StockPriceCalculator {
 		stocksCompleted = 0;
 		for (String stock : stockSymbolList) {
 			try {
-				Stock s = YahooFinance.get(stock);
+				Stock s = YahooFinance.get(stock, true);
 				stockList.add(s);
 				stocksCompleted++;
                 progressBar.setValue(100 * stocksCompleted / stockSymbolList.length);
@@ -44,6 +45,9 @@ public class StockPriceCalculator {
 				
 			}
 		}
+
+//		Map<String, Stock> stockMap = YahooFinance.get(stockSymbolList);
+//		stockList.addAll(stockMap.values());
 	}
 
 	public ArrayList<StockData> getChangeForAllStocks() {
