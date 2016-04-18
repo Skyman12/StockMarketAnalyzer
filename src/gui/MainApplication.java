@@ -91,7 +91,7 @@ public class MainApplication extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					stockPriceCalculator = new StockPriceCalculator("testCompanyList.txt");
+					stockPriceCalculator = new StockPriceCalculator("companylist.txt");
 					watchlistPriceCalculator = new StockPriceCalculator("usersStocks.txt");
 					
 					MainApplication frame = new MainApplication();

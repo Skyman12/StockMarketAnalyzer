@@ -54,10 +54,10 @@ public class StockPriceCalculator {
 		File file = new File(fileName);
 		Scanner reader = new Scanner(file);
 		stockSymbolList = new ArrayList<>();
-		while (reader.hasNextLine()) {
-			String text = reader.nextLine().replace('"', ' ');
-			String[] dataList = text.split(",");
-			stockSymbolList.add(dataList[0].trim());
+		while (reader.hasNext()) {
+			String text = reader.next();
+			stockSymbolList.add(text.trim());
+			reader.nextLine();
 		}
 		
 		stockList.clear();

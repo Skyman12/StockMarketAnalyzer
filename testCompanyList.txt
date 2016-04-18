@@ -1,11 +1,7 @@
-"ALOT","Astro-Med, Inc.","13.7","100109393.5","n/a","1983","Technology","Computer peripheral equipment","http://www.nasdaq.com/symbol/alot",
-"ATRO","Astronics Corporation","58.73","1299464091.1","n/a","n/a","Capital Goods","Military/Government/Technical","http://www.nasdaq.com/symbol/atro",
-"ASTC","Astrotech Corporation","2.32","49393410.16","n/a","n/a","Capital Goods","Military/Government/Technical","http://www.nasdaq.com/symbol/astc",
-"ASUR","Asure Software Inc","5.82","35265102.72","n/a","n/a","Technology","EDP Services","http://www.nasdaq.com/symbol/asur",
-"ATAI","ATA Inc.","3.11","39216207.43","12609713","2008","Consumer Services","Other Consumer Services","http://www.nasdaq.com/symbol/atai",
-"ATRA","Atara Biotherapeutics, Inc.","50.06","1427358627.42","n/a","2014","Health Care","Biotechnology: Biological Products (No Diagnostic Substances)","http://www.nasdaq.com/symbol/atra",
-"ATHN","athenahealth, Inc.","142.14","5492031331.62","n/a","2007","Miscellaneous","Business Services","http://www.nasdaq.com/symbol/athn",
-"AFCB","Athens Bancshares Corporation","27.81","50296470.75","n/a","2010","Finance","Savings Institutions","http://www.nasdaq.com/symbol/afcb",
-"ATHX","Athersys, Inc.","1.17","97246309.68","n/a","n/a","Health Care","Major Pharmaceuticals","http://www.nasdaq.com/symbol/athx",
-"AAPC","Atlantic Alliance Partnership Corp.","10.23","106267326.99","n/a","2015","Finance","Business Services","http://www.nasdaq.com/symbol/aapc",
-"TSLA"
+A	Agilent Technologies
+AA	Alcoa Inc
+AA-B	Alcoa Inc
+AAC	Aac Holdings Inc
+AAN	Aaron's Inc
+AAP	Advance Auto Parts Inc
+AAT	American Assets Trust
